@@ -17,13 +17,14 @@ public class Application {
 		Logger logger = LoggerFactory.getLogger(Application.class);
 		logger.info("Started");
 		HtcRepository repository = new HtcRepository();
-		Keyspace keyspace = repository.getKeyspace();
 		try {
+			repository.init();
+			Keyspace keyspace = repository.getKeyspace();
 			KeyspaceDefinition kd = keyspace.describeKeyspace();
 			String skd = kd.toString();
 			System.out.println(skd);
 		} catch (ConnectionException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			logger.error("Oops...", e);
 		}
 	}
 }
