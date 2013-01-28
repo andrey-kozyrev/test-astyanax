@@ -20,9 +20,9 @@ public class Application {
 		try {
 			repository.init();
 			Keyspace keyspace = repository.getKeyspace();
-			KeyspaceDefinition kd = keyspace.describeKeyspace();
-			String skd = kd.toString();
-			System.out.println(skd);
+
+
+
 		} catch (ConnectionException e) {
 			logger.error("Oops...", e);
 		}
