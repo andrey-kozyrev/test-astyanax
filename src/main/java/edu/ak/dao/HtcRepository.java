@@ -73,7 +73,7 @@ public class HtcRepository {
 			.withConnectionPoolConfiguration(new ConnectionPoolConfigurationImpl("htc")
 				.setPort(9160)
 				.setMaxConnsPerHost(10)
-				.setSeeds("ENCTADB, ENCTSDB, ENCTSAPP1, ENCTSAPP2, ENCTAAPP")
+				.setSeeds("ENCTADB, ENCTSDB, ENCTAAPP, ENCTSAPP1, ENCTSAPP2")
 			)
 			.withConnectionPoolMonitor(new CountingConnectionPoolMonitor())
 			.buildCluster(ThriftFamilyFactory.getInstance());

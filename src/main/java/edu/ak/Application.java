@@ -1,9 +1,7 @@
 package edu.ak;
 
 import com.netflix.astyanax.Keyspace;
-import com.netflix.astyanax.connectionpool.OperationResult;
 import com.netflix.astyanax.connectionpool.exceptions.ConnectionException;
-import com.netflix.astyanax.ddl.KeyspaceDefinition;
 import edu.ak.dao.HtcRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,7 +26,7 @@ public class Application {
 
 		static {
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < 100; ++i) {
+			for (int i = 0; i < 1; ++i) {
 				sb.append("The Rows object returned by the query transparently paginates through all rows in the column family. Since queries to the keyspace are actually done through the iteration it is necessary to set an ExceptionCallback for your application to handle the exceptions. Return true from the callback to retry or false to exit the iteration loop.");
 			}
 			TEXT = sb.toString();
@@ -45,10 +42,11 @@ public class Application {
 			Logger logger = LoggerFactory.getLogger(Application.class);
 			try {
 				final int count = 10;
+				final int user_count = 50;
 				long latency = 0;
 				Keyspace keyspace = _repository.getKeyspace();
-				for (int n = 0; n < count; ++n) {
-					for (int m = 0; m < count; ++m) {
+				for (int n = 0; n < user_count; ++n) {
+					for (int m = 0; m < user_count; ++m) {
 						String key = String.format("USER%d:USER%d", n, m);
 						for (int i = 0; i < count; ++i) {
 							Date column = new Date();
@@ -56,7 +54,7 @@ public class Application {
 						}
 					}
 				}
-				logger.debug(String.format("Per-thread insert average: %d milliseconds", latency / count / count / count / 1000));
+				logger.debug(String.format("Per-thread insert average: %d milliseconds", latency / user_count / user_count / count / 1000));
 			} catch (ConnectionException e) {
 				logger.error("Oops...", e);
 			}
@@ -70,8 +68,8 @@ public class Application {
 		try {
 			repository.start();
 
-			final int count = 20;
-			List<Thread> runners = new ArrayList<Thread>(count);
+			final int count = 100;
+			List<Thread> runners = new ArrayList<>(count);
 
 			long millis = System.currentTimeMillis();
 
